@@ -1,6 +1,7 @@
 import numpy as np
 
 WRIST = 0
+
 THUMB_TIP, THUMB_MCP = 4, 2
 INDEX_TIP, INDEX_MCP = 8, 5
 MIDDLE_TIP, MIDDLE_MCP = 12, 9
@@ -15,10 +16,16 @@ def _dist(lm, i, j, w, h):
 
 
 def get_extended_fingers(hand_landmarks, w, h):
-    lm = hand_landmarks.landmark
+    """
+    hand_landmarks puede ser directamente la lista de
+    NormalizedLandmark que entrega MediaPipe Tasks.
+    """
+
+    lm = hand_landmarks
 
     def is_extended(tip, mcp):
-        return _dist(lm, tip, WRIST, w, h) > _dist(lm, mcp, WRIST, w, h) * 1.3
+        return _dist(lm, tip, WRIST, w, h) > \
+               _dist(lm, mcp, WRIST, w, h) * 1.3
 
     return {
         "thumb": is_extended(THUMB_TIP, THUMB_MCP),
